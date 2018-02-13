@@ -1,25 +1,54 @@
-client_id: <input type="text" id="client_id" onKeyUp="update()">
-client_secret: <input type="text" id="client_secret">
-scope: <input type="text" id="scope" onKeyUp="update()">
-<br>
-<a id="url"></a>
+
+<div id="mode_auth">
+	client_id: <input type="text" id="client_id">
+	scope: <input type="text" id="scope">
+	<button onClick="auth()">Auth</button>
+</div>
+
+<div id="mode_token">
+	code: <span id="code"></span>
+	client_id: <input type="text" id="client_id2">
+	client_secret: <input type="text" id="client_secret">
+	<button onClick="token()">Auth</button>
+	<pre id="result"></pre>
+</div>
 
 <script>
 
 const $ = id => document.getElementById(id);
-var client_id = $("client_id");
-var client_secret = $("client_secret");
-var scope = $("scope");
-var url = document.getElementById("url");
+const redirect_uri = location.href.substr(0, location.href.lastIndexOf("/"));
 
-function update() {
+const i = location.search.indexOf("=");
+if(i == -1) {
+	$("mode_token").style.display = "none";
+} else {
+	$("mode_auth").style.display = "none";
+	$("code").innerText = location.search.substr(i + 1);
+}
 
-	https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=560614567705-f6gaj5991i2kerq86368bl8e75j55ecp.apps.googleusercontent.com&redirect_uri=http://localhost&scope=https://www.googleapis.com/auth/youtube.readonly&access_type=offline
+function auth() {
+	location.href = `
+		https://accounts.google.com/o/oauth2/v2/auth?
+		response_type=code&
+		client_id=${$("client_id").value}&
+		redirect_uri=${redirect_uri}&
+		scope=${$("scope").value}&
+		access_type=offline
+	`;
+}
 
-
-	var a = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${client_id.value}&redirect_uri=${location.href}&scope=${scope.value}&access_type=offline`;
-	url.setAttribute("href", a);
-	url.innerText = a;
+function token() {
+	var req = new XMLHttpRequest();
+	req.open("POST", "https://www.googleapis.com/oauth2/v4/token", false);
+	req.send(`
+		code=${$("code").innerText}&
+		client_id=${$("client_id").value}&
+		client_secret=${$("client_secret").value}&
+		redirect_uri=${redirect_uri}&
+		grant_type=authorization_code&
+		access_type=offline
+	`);
+	$("result").innerText = req.responseText;
 }
 
 </script>
