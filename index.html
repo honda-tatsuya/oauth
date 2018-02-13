@@ -16,7 +16,7 @@
 <script>
 
 const $ = id => document.getElementById(id);
-const redirect_uri = location.href.substr(0, location.href.lastIndexOf("/"));
+const redirect_uri = location.href.substr(0, location.href.lastIndexOf("/") + 1);
 
 const i = location.search.indexOf("=");
 if(i == -1) {
