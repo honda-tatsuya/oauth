@@ -1,0 +1,25 @@
+client_id: <input type="text" id="client_id" onKeyUp="update()">
+client_secret: <input type="text" id="client_secret">
+scope: <input type="text" id="scope" onKeyUp="update()">
+<br>
+<a id="url"></a>
+
+<script>
+
+const $ = id => document.getElementById(id);
+var client_id = $("client_id");
+var client_secret = $("client_secret");
+var scope = $("scope");
+var url = document.getElementById("url");
+
+function update() {
+
+	https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=560614567705-f6gaj5991i2kerq86368bl8e75j55ecp.apps.googleusercontent.com&redirect_uri=http://localhost&scope=https://www.googleapis.com/auth/youtube.readonly&access_type=offline
+
+
+	var a = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${client_id.value}&redirect_uri=${location.href}&scope=${scope.value}&access_type=offline`;
+	url.setAttribute("href", a);
+	url.innerText = a;
+}
+
+</script>
