@@ -1,4 +1,3 @@
-
 <div id="mode_auth">
 	client_id: <input type="text" id="client_id">
 	scope: <input type="text" id="scope">
@@ -27,27 +26,26 @@ if(i == -1) {
 }
 
 function auth() {
-	location.href = `
-		https://accounts.google.com/o/oauth2/v2/auth?
-		response_type=code&
-		client_id=${$("client_id").value}&
-		redirect_uri=${redirect_uri}&
-		scope=${$("scope").value}&
-		access_type=offline
-	`;
+	location.href = "https://accounts.google.com/o/oauth2/v2/auth?" + [
+		`response_type=code`,
+		`client_id=${$("client_id").value}`,
+		`redirect_uri=${redirect_uri}`,
+		`scope=${$("scope").value}`,
+		`access_type=offline`,
+	].join("&");
 }
 
 function token() {
 	var req = new XMLHttpRequest();
 	req.open("POST", "https://www.googleapis.com/oauth2/v4/token", false);
-	req.send(`
-		code=${$("code").innerText}&
-		client_id=${$("client_id").value}&
-		client_secret=${$("client_secret").value}&
-		redirect_uri=${redirect_uri}&
-		grant_type=authorization_code&
-		access_type=offline
-	`);
+	req.send([
+		`code=${$("code").innerText}`,
+		`client_id=${$("client_id").value}`,
+		`client_secret=${$("client_secret").value}`,
+		`redirect_uri=${redirect_uri}`,
+		`grant_type=authorization_code`,
+		`access_type=offline`
+	].join("&"));
 	$("result").innerText = req.responseText;
 }
 
