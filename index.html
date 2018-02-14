@@ -23,9 +23,7 @@
 			<label for="access_type">access_type</label>
 			<input id="access_type" name="access_type" class="pure-input-2-3" type="text" value="offline">
 		</div>
-		<div class="pure-controls">
-			<button type="submit" class="pure-button pure-button-primary">Submit</button>
-		</div>
+		<button type="submit" class="pure-button pure-button-primary">Submit</button>
 	</form>
 </div>
 
@@ -50,27 +48,25 @@
 		</div>
 		<div class="pure-control-group">
 			<label for="grant_type">grant_type</label>
-			<input id="grant_type" name="grant_type" class="pure-input-2-3" type="text" value="offline">
+			<input id="grant_type" name="grant_type" class="pure-input-2-3" type="text" value="authorization_code">
 		</div>
 		<div class="pure-control-group">
 			<label for="access_type2">access_type</label>
 			<input id="access_type2" name="access_type" class="pure-input-2-3" type="text" value="offline">
 		</div>
-		<div class="pure-controls">
-			<button type="submit" class="pure-button pure-button-primary">Submit</button>
-		</div>
+		<button type="submit" class="pure-button pure-button-primary">Submit</button>
 	</form>
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-const i = location.search.indexOf("=");
-if(i == -1) {
-	$("mode_token").style.display = "none";
-	$("redirect_uri").value = location.origin + location.pathname;
-} else {
-	$("mode_auth").style.display = "none";
-	$("code").value = location.search.substr(i + 1);
-	$("redirect_uri2").value = location.origin + location.pathname;
-}
+	const $ = id => document.getElementById(id);
+	const i = location.search.indexOf("=");
+	if(i == -1) {
+		$("mode_token").style.display = "none";
+		$("redirect_uri").value = location.origin + location.pathname;
+	} else {
+		$("mode_auth").style.display = "none";
+		$("code").value = location.search.substr(i + 1);
+		$("redirect_uri2").value = location.origin + location.pathname;
+	}
 </script>
