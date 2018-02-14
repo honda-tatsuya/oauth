@@ -1,52 +1,76 @@
-<div id="mode_auth">
-	client_id: <input type="text" id="client_id">
-	scope: <input type="text" id="scope">
-	<button onClick="auth()">Auth</button>
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+
+<div id="mode_auth" align="center">
+	<h1>auth</h1>
+	<form method="POST" class="pure-form pure-form-aligned" action="https://accounts.google.com/o/oauth2/v2/auth">
+		<div class="pure-control-group">
+			<label for="response_type">response_type</label>
+			<input id="response_type" name="response_type" class="pure-input-2-3" type="text" value="code">
+		</div>
+		<div class="pure-control-group">
+			<label for="client_id">client_id</label>
+			<input id="client_id" name="client_id" class="pure-input-2-3" type="text">
+		</div>
+		<div class="pure-control-group">
+			<label for="redirect_uri">redirect_uri</label>
+			<input id="redirect_uri" name="redirect_uri" class="pure-input-2-3" type="text">
+		</div>
+		<div class="pure-control-group">
+			<label for="scope">scope</label>
+			<input id="scope" name="scope" class="pure-input-2-3" type="text">
+		</div>
+		<div class="pure-control-group">
+			<label for="access_type">access_type</label>
+			<input id="access_type" name="access_type" class="pure-input-2-3" type="text" value="offline">
+		</div>
+		<div class="pure-controls">
+			<button type="submit" class="pure-button pure-button-primary">Submit</button>
+		</div>
+	</form>
 </div>
 
-<div id="mode_token">
-	code: <span id="code"></span>
-	client_id: <input type="text" id="client_id2">
-	client_secret: <input type="text" id="client_secret">
-	<button onClick="token()">Auth</button>
-	<pre id="result"></pre>
+<div id="mode_token" align="center">
+	<h1>token</h1>
+	<form method="POST" class="pure-form pure-form-aligned" action="https://www.googleapis.com/oauth2/v4/token">
+		<div class="pure-control-group">
+			<label for="code">code</label>
+			<input id="code" name="code" class="pure-input-2-3" type="text">
+		</div>
+		<div class="pure-control-group">
+			<label for="client_id2">client_id</label>
+			<input id="client_id2" name="client_id" class="pure-input-2-3" type="text">
+		</div>
+		<div class="pure-control-group">
+			<label for="client_secret">client_secret</label>
+			<input id="client_secret" name="client_secret" class="pure-input-2-3" type="text">
+		</div>
+		<div class="pure-control-group">
+			<label for="redirect_uri2">redirect_uri</label>
+			<input id="redirect_uri2" name="redirect_uri" class="pure-input-2-3" type="text">
+		</div>
+		<div class="pure-control-group">
+			<label for="grant_type">grant_type</label>
+			<input id="grant_type" name="grant_type" class="pure-input-2-3" type="text" value="offline">
+		</div>
+		<div class="pure-control-group">
+			<label for="access_type2">access_type</label>
+			<input id="access_type2" name="access_type" class="pure-input-2-3" type="text" value="offline">
+		</div>
+		<div class="pure-controls">
+			<button type="submit" class="pure-button pure-button-primary">Submit</button>
+		</div>
+	</form>
 </div>
 
 <script>
-
 const $ = id => document.getElementById(id);
-const redirect_uri = location.href.substr(0, location.href.lastIndexOf("/") + 1);
-
 const i = location.search.indexOf("=");
 if(i == -1) {
 	$("mode_token").style.display = "none";
+	$("redirect_uri").value = location.origin + location.pathname;
 } else {
 	$("mode_auth").style.display = "none";
-	$("code").innerText = location.search.substr(i + 1);
+	$("code").value = location.search.substr(i + 1);
+	$("redirect_uri2").value = location.origin + location.pathname;
 }
-
-function auth() {
-	location.href = "https://accounts.google.com/o/oauth2/v2/auth?" + [
-		`response_type=code`,
-		`client_id=${$("client_id").value}`,
-		`redirect_uri=${redirect_uri}`,
-		`scope=${$("scope").value}`,
-		`access_type=offline`,
-	].join("&");
-}
-
-function token() {
-	var req = new XMLHttpRequest();
-	req.open("POST", "https://www.googleapis.com/oauth2/v4/token", false);
-	req.send([
-		`code=${$("code").innerText}`,
-		`client_id=${$("client_id").value}`,
-		`client_secret=${$("client_secret").value}`,
-		`redirect_uri=${redirect_uri}`,
-		`grant_type=authorization_code`,
-		`access_type=offline`
-	].join("&"));
-	$("result").innerText = req.responseText;
-}
-
 </script>
